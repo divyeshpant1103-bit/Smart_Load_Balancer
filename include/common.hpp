@@ -49,7 +49,11 @@ struct Request{
     }
 
     struct SystemConfig{
-
+        static constexpr int INITIAL_SERVER_COUNT = 3;
+        static constexpr int MAX_SERVER_CAPACITY = 10;
+        static constexpr int SCALE_UP_THRESHOLD = 75;
+        static constexpr int SCALE_DOWN_THRESHOLD = 25;
+        static constexpr int SCALING_STREAK_LIMIT = 2;
     }
 };
 
