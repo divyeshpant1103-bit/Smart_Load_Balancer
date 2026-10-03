@@ -23,6 +23,10 @@ class Server{
     public:
         Server(int id, int capacity = SystemConfig::MAX_SERVER_CAPACITY);
         ~Server();
+
+        //Prevent copying
+        Server(const Server&) = delete;
+        Server& operator = (const Server&) = delete;
         
         int getId() const;
         int getMaxCapacity() const;
@@ -34,6 +38,7 @@ class Server{
         bool assisgnRequest(const Request& req);
         void processTick();
         bool popCompletedRequest(Request& completed_req);
+        requestNode* getHead() const { return queue_head; }
 
 };
 
