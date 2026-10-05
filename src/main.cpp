@@ -1,5 +1,7 @@
 #include "../include/failure_handler.hpp"
 #include "../include/auto_scaler.hpp"
+#include "../include/report_generator.hpp"
+#include <vector>
 #include <iostream>
 
 int main()
@@ -30,5 +32,11 @@ int main()
     scaler.checkScaling(20.0, 0, 3);  // Low utilization
     scaler.checkScaling(50.0, 1, 3);  // Normal load
 
+    // ReportGenerator test
+    ReportGenerator report;
+
+    std::vector<double> utilization = {45.0, 80.0, 30.0, 95.0, 60.0};
+
+    report.generateReport(utilization);
     return 0;
 }
