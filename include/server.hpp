@@ -28,17 +28,18 @@ class Server{
         Server(const Server&) = delete;
         Server& operator = (const Server&) = delete;
         
-        int getId() const;
-        int getMaxCapacity() const;
-        int getCurrentLoad() const;
-        double getUtilizationPercentage() const;
-        ServerStatus getStatus() const;
+        int getId();
+        int getMaxCapacity();
+        int getCurrentLoad();
+        double getUtilizationPercentage();
+        ServerStatus getStatus();
         void setStatus(ServerStatus new_status);
 
         bool assisgnRequest(const Request& req);
         void processTick();
         bool popCompletedRequest(Request& completed_req);
-        requestNode* getHead() const { return queue_head; }
+        void clearQueue();
+        requestNode* getHead() { return queue_head; }
 
 };
 
