@@ -1,8 +1,10 @@
 #include "../include/failure_handler.hpp"
+#include "../include/auto_scaler.hpp"
 #include <iostream>
 
 int main()
 {
+    // FailureHandler test
     FailureHandler handler(1);
 
     std::cout << "Initial server status: "
@@ -17,6 +19,16 @@ int main()
 
     std::cout << "Server status after recovery: "
               << handler.isServerActive() << "\n";
+
+
+    // AutoScaler test
+    AutoScaler scaler;
+
+    std::cout << "\nAutoScaler Tests:\n";
+
+    scaler.checkScaling(80.0, 0, 3);  // High utilization
+    scaler.checkScaling(20.0, 0, 3);  // Low utilization
+    scaler.checkScaling(50.0, 1, 3);  // Normal load
 
     return 0;
 }
