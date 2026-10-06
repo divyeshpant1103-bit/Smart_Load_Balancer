@@ -23,3 +23,30 @@ void RequestQueue::enqueue(Request request)
 
     count++;
 }
+Request RequestQueue::dequeue()
+{
+    if (front == nullptr)
+    {
+        return Request(-1);
+    }
+    Request request = front->request;
+    Node* temp = front;
+
+    front = front->next;
+
+    if (front == nullptr)
+    {
+        back = nullptr;
+    }
+
+    delete temp;
+    count--;
+
+    return request;
+}
+
+
+int RequestQueue::size()
+{
+    return count;
+}

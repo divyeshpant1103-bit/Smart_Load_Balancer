@@ -14,9 +14,12 @@ private:
     Node* front;
     Node* back;
     int count;
+
 public:
     RequestQueue();
     void enqueue(Request request);
     Request dequeue();
+    void enqueue_front(Request request);
+    int size();
 };
 #endif
