@@ -33,7 +33,7 @@ int Server::getCurrentLoad() {
 }
 
 int Server::getMaxCapacity() {
-    return current_load;
+    return max_capacity;
 }
 
 double Server::getUtilizationPercentage() {
@@ -49,7 +49,7 @@ void Server::setStatus(ServerStatus new_status){
     status = new_status;
 }
 
-bool Server::assisgnRequest(const Request& req) {
+bool Server::assignRequest(const Request& req) {
     if(status != ServerStatus::ACTIVE || current_load >= max_capacity){
         return false;
     }
@@ -67,7 +67,7 @@ bool Server::assisgnRequest(const Request& req) {
 
 void Server::processTick() {
     if(queue_head == nullptr) return;
-    queue_head->data.remaining_ticks --;
+    queue_head->data.remaining_ticks--;
 }
 
 bool Server::popCompletedRequest(Request& out_completed_req) {
@@ -81,6 +81,6 @@ bool Server::popCompletedRequest(Request& out_completed_req) {
         queue_tail = nullptr;
     }
     delete tmp;
-    current_load --;
+    current_load--;
     return true;
 }

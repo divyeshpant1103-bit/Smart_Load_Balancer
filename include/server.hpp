@@ -35,7 +35,7 @@ class Server{
         ServerStatus getStatus();
         void setStatus(ServerStatus new_status);
 
-        bool assisgnRequest(const Request& req);
+        bool assignRequest(const Request& req);
         void processTick();
         bool popCompletedRequest(Request& completed_req);
         void clearQueue();

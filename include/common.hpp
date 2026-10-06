@@ -16,6 +16,14 @@ enum class ServerStatus{
     INACTIVE
 };
 
+struct SystemConfig{
+    static const int INITIAL_SERVER_COUNT = 3;
+    static const int MAX_SERVER_CAPACITY = 10;
+    static const int SCALE_UP_THRESHOLD = 75;
+    static const int SCALE_DOWN_THRESHOLD = 25;
+    static const int SCALING_STREAK_LIMIT = 2;
+};
+
 struct Request{
     int request_id;
     RequestType type;
@@ -46,14 +54,6 @@ struct Request{
             case RequestType::HEAVY : return "HEAVY";
             default : return "UNKNOWN";
         }
-    }
-
-    struct SystemConfig{
-        static const int INITIAL_SERVER_COUNT = 3;
-        static const int MAX_SERVER_CAPACITY = 10;
-        static const int SCALE_UP_THRESHOLD = 75;
-        static const int SCALE_DOWN_THRESHOLD = 25;
-        static const int SCALING_STREAK_LIMIT = 2;
     }
 };
 
