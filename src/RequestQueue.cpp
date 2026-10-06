@@ -6,6 +6,9 @@ RequestQueue::RequestQueue()
     back = nullptr;
     count=0;
 }
+
+
+
 void RequestQueue::enqueue(Request request)
 {
     Node* newNode = new Node{request, nullptr};
@@ -45,8 +48,30 @@ Request RequestQueue::dequeue()
     return request;
 }
 
+void RequestQueue::enqueue_front(Request request)
+{
+    Node* newNode = new Node{request, front};
+    front = newNode;
+
+    if (back == nullptr)
+    {
+        back = newNode;
+    }
+
+    count++;
+}
 
 int RequestQueue::size()
 {
     return count;
+}
+
+Request RequestQueue::peek()
+{
+    if (front == nullptr)
+    {
+        return Request(-1);
+    }
+
+    return front->request;
 }
