@@ -31,7 +31,7 @@ The goal is to demonstrate how linked lists, queues, heaps, sorting algorithms a
 **Team ID:** DSCPP-III-2026-T174
 **Institution:** Graphic Era University, Dehradun
 
-| Role | Name | Enrollment No. |
+| Role | Name | Student ID |
 | :--- | :--- | :--- |
 | **Team Lead** | Sarthak Jaiswal | 2510011427 |
 | **Member 1** | Vaishnavi Garg | 2510012701 |
@@ -72,11 +72,25 @@ The goal is to demonstrate how linked lists, queues, heaps, sorting algorithms a
 ```text
 Smart_Load_Balancer/
 ├── include/
-│   └── server.hpp          
-├── Modules_Notes/
-│   └── Load_Balancer.md
+│   ├── autoScaler.hpp
+│   ├── clusterManager.hpp
+│   ├── common.hpp
+│   ├── failureHandler.hpp
+│   ├── reportGenerator.hpp
+│   ├── requestQueue.hpp
+│   ├── server.hpp
+│   └── serverMaxHeap.hpp
 ├── src/
-│   └── main.cpp
+│   ├── autoScaler.cpp
+│   ├── failueHandler.cpp
+│   ├── main.cpp
+│   ├── reportGenerator.cpp
+│   ├── Request.cpp
+│   ├── requestQueue.cpp
+│   └── server.cpp
+├── Modules_Notes/
+│   ├── LoadBalancer.md
+│   └── Server.md
 ├── .gitignore
 ├── Makefile
 └── README.md
