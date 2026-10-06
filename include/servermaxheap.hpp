@@ -69,6 +69,36 @@ private:
             }
         }
     }
+    public:
+    void insert(Server *server){
+       heap.push_back(server);
+        siftup(heap.size() - 1);
+    }
+    int size(){
+        return heap.size();
+    }
+    bool empty(){
+        return heap.empty();
+    }
+    Server *extractMax(){
+        if(heap.empty()){
+            return nullptr;
+        }else{
+            Server *maxServer = heap[0];
+            heap[0] = heap.back();
+            heap.pop_back();
+            siftdown(0);
+            return maxServer;
+        }
+    }
+    //test Case Purpose
+    void GetRoot(){
+        if(!heap.empty()){
+            Server *maxServer = heap[0];
+            std::cout << "Root Server ID: " << maxServer->getId() << std::endl;
+        }else{
+            std::cout << "Heap is empty." << std::endl;
+        }
+    }
 };
-
 #endif // end of the include guard
