@@ -2,16 +2,15 @@
 #include <iostream>
 
 autoScaler::autoScaler(){
-    scaleUpThreshold = 75.0; // Example threshold for scaling up
-    scaleDownThreshold = 25.0; // Example threshold for scaling down
-    minimumServers = 2; // Minimum number of servers to maintain
-    lowUtilizationStreak = 0;
-    scalingStreakLimit = 2; // Number of consecutive low utilizations before scaling down
+    scaleUpThreshold = 75.0; 
+    scaleDownThreshold = 25.0; 
+    minimumServers = 2;     lowUtilizationStreak = 0;
+    scalingStreakLimit = 2; 
 }
 
 ScalingDecision autoScaler :: checkScaling(const std::vector<Server*>& servers, int queueSize){
     if(servers.empty()){
-        return ScalingDecision::SCALE_UP; // If no servers, we need to scale up
+        return ScalingDecision::SCALE_UP; 
     }
     double totalUtilization = 0.0;
     int activeServers = 0;
@@ -40,11 +39,46 @@ ScalingDecision autoScaler :: checkScaling(const std::vector<Server*>& servers, 
             return ScalingDecision::SCALE_DOWN;
         }
     } else {
-        lowUtilizationStreak = 0; // Reset streak if utilization is not low
+        lowUtilizationStreak = 0; 
     }
     std::cout << "autoScaler: No Scaling Action Required.\n";
     return ScalingDecision::NO_ACTION;
+
+    
 }
+
+ScalingDecision autoScaler::scaleCluster(ClusterManager& cluster,int queueSize){
+    std::vector<Server*> servers = cluster.getActiveServers();
+
+    ScalingDecision decision = checkScaling(servers, queueSize);
+
+    if (decision == ScalingDecision::SCALE_UP)
+    {
+        if (!cluster.isAtMaxCapacity())
+        {
+            cluster.addServer();
+        }
+        else
+        {
+            std::cout << "Cluster is at maximum capacity.\n";
+        }
+    }
+    else if (decision == ScalingDecision::SCALE_DOWN)
+    {
+        
+        if (static_cast<int>(cluster.getActiveServers().size()) > minimumServers)
+        {
+            if (!cluster.removeIdleServer())
+            {
+                std::cout << "No idle server available to remove.\n";
+            }
+        }
+    }
+
+    return decision;
+}
+
+
 int autoScaler::getLowUtilizationStreak() const{
     return lowUtilizationStreak;
 }
