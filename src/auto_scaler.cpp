@@ -27,7 +27,7 @@ ScalingDecision autoScaler :: checkScaling(const std::vector<Server*>& servers, 
     }
     double averageUtilization = totalUtilization / activeServers;
     
-    if(averageUtilization > scaleUpThreshold || queueSize > 2){
+    if(averageUtilization > scaleUpThreshold && queueSize>2){
         lowUtilizationStreak = 0; 
         std::cout << "autoScaler: Scale Up Required.\n";
         return ScalingDecision::SCALE_UP;
