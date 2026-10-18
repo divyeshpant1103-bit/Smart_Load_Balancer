@@ -2,10 +2,11 @@
 #include <iostream>
 
 autoScaler::autoScaler(){
-    scaleUpThreshold = 75.0; 
-    scaleDownThreshold = 25.0; 
-    minimumServers = 2;     lowUtilizationStreak = 0;
-    scalingStreakLimit = 2; 
+    scaleUpThreshold = SystemConfig::SCALE_UP_THRESHOLD; 
+    scaleDownThreshold = SystemConfig::SCALE_DOWN_THRESHOLD; 
+    minimumServers = SystemConfig::INITIAL_SERVER_COUNT;     
+    lowUtilizationStreak = 0;
+    scalingStreakLimit = SystemConfig::SCALING_STREAK_LIMIT; 
 }
 
 ScalingDecision autoScaler :: checkScaling(const std::vector<Server*>& servers, int queueSize){
