@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include <vector>
 #include "../include/common.hpp"
 #include "../include/clusterManager.hpp"
@@ -11,7 +12,6 @@ void printDashboard(ClusterManager &cluster, RequestQueue &queue, Loadbalancer &
     std::cout << "\n=========================================\n";
     std::cout << "         SYSTEM DASHBOARD SNAPSHOT       \n";
     std::cout << "=========================================\n";
-
     std::vector<Server *> activeServers = cluster.getActiveServers();
     std::cout << "Active Servers : " << activeServers.size() << " / " << SystemConfig::MAX_CLUSTER_SIZE << "\n";
     std::cout << "Queue Backlog  : " << queue.size() << " requests waiting\n";
@@ -35,9 +35,32 @@ void printDashboard(ClusterManager &cluster, RequestQueue &queue, Loadbalancer &
     std::cout << "=========================================\n\n";
 }
 
+// Advances the system by `ticks` time-steps.
+void runTicks(Loadbalancer &lb, int ticks)
+{
+    std::cout << "[*] Processing " << ticks << " system tick" << (ticks == 1 ? "" : "s") << "...\n";
+    for (int i = 0; i < ticks; i++)
+    {
+        lb.processTick();
+    }
+}
+
+// Reads a positive integer; returns false (and clears the stream) on bad input.
+bool readPositiveInt(const char *prompt, int &value)
+{
+    std::cout << prompt;
+    if (!(std::cin >> value) || value <= 0)
+    {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Please enter a positive whole number.\n";
+        return false;
+    }
+    return true;
+}
+
 int main()
 {
-    // 1. Initialize Core System
     ClusterManager cluster;
     RequestQueue queue;
     Loadbalancer lb(&cluster, &queue);
@@ -49,27 +72,28 @@ int main()
     int next_req_id = 100;
     int choice;
 
-    // 2. Main Menu Loop (Manual Mode)
     while (true)
     {
         std::cout << "\n[ SIMULATOR CONTROL PANEL (MANUAL MODE) ]\n";
-        std::cout << "1. Send a single LIGHT request\n";
-        std::cout << "2. Send a single HEAVY request\n";
-        std::cout << "3. Send a BATCH of requests (Overload system)\n";
-        std::cout << "4. Process 1 Time Tick (Trigger worker & AutoScaler)\n";
-        std::cout << "5. Process 5 Time Ticks (Drain system)\n";
-        std::cout << "6. Print System Dashboard\n";
-        std::cout << "7. Exit\n";
+        std::cout << "1. Send a single LIGHT request (1 tick)\n";
+        std::cout << "2. Send a single HEAVY request (5 ticks)\n";
+        std::cout << "3. Send a BATCH of MEDIUM requests (3 ticks)\n";
+        std::cout << "4. Process 1 Tick   (Clears LIGHT requests)\n";
+        std::cout << "5. Process 3 Ticks  (Clears MEDIUM requests)\n";
+        std::cout << "6. Process 5 Ticks  (Clears HEAVY requests)\n";
+     
+        std::cout << "8. Print System Dashboard\n";
+        std::cout << "9. Exit\n";
         std::cout << "Enter choice: ";
 
         if (!(std::cin >> choice))
         {
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
+            std::cin.clear();//clear buffer
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');//discard input
             continue;
         }
 
-        if (choice == 7)
+        if (choice == 9)
         {
             std::cout << "Shutting down simulator...\n";
             break;
@@ -78,9 +102,13 @@ int main()
         int batchSize = 0;
         if (choice == 3)
         {
-            std::cout << "Enter batch size (e.g., 15): ";
-            std::cin >> batchSize;
+            if (!readPositiveInt("Enter batch size (e.g., 15): ", batchSize))
+            {
+                continue;
+            }
         }
+
+       
 
         switch (choice)
         {
@@ -109,21 +137,15 @@ int main()
             break;
         }
         case 4:
-        {
-            std::cout << "[*] Processing 1 system tick...\n";
-            lb.processTick();
+            runTicks(lb, 1);//in main
             break;
-        }
         case 5:
-        {
-            std::cout << "[*] Processing 5 system ticks...\n";
-            for (int i = 0; i < 5; i++)
-            {
-                lb.processTick();
-            }
+            runTicks(lb, 3);
             break;
-        }
         case 6:
+            runTicks(lb, 5);
+            break;
+        case 8:
         {
             printDashboard(cluster, queue, lb);
             break;

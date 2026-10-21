@@ -66,21 +66,38 @@ bool Server::assignRequest(const Request& req) {
 }
 
 void Server::processTick() {
-    if(queue_head == nullptr) return;
-    queue_head->data.remaining_ticks--;
+    requestNode* current = queue_head;
+    while (current != nullptr) {
+        if (current->data.remaining_ticks > 0) {
+            current->data.remaining_ticks--;
+        }
+        current = current->next;
+    }
 }
 
 bool Server::popCompletedRequest(Request& out_completed_req) {
-    if(queue_head == nullptr || queue_head->data.remaining_ticks > 0){
-        return false;
+    requestNode* prev = nullptr;
+    requestNode* current = queue_head;
+
+    while (current != nullptr) {
+        if (current->data.remaining_ticks <= 0) {
+            out_completed_req = current->data;
+            if (prev == nullptr) {
+                queue_head = current->next;  
+            } else {
+                prev->next = current->next;
+            }
+
+            if (current == queue_tail) {
+                queue_tail = prev;    
+            }
+
+            delete current;
+            current_load--;
+            return true;
+        }
+        prev = current;
+        current = current->next;
     }
-    requestNode* tmp = queue_head;
-    out_completed_req = tmp->data;
-    queue_head = queue_head->next;
-    if(queue_head == nullptr){
-        queue_tail = nullptr;
-    }
-    delete tmp;
-    current_load--;
-    return true;
+    return false;        
 }

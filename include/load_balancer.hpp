@@ -1,24 +1,27 @@
-#ifndef LOAD_BALANCER_HPP
-#define LOAD_BALANCER_HPP
 #include "common.hpp"
-
+#include "auto_scaler.hpp"
 class ClusterManager;
 class RequestQueue;
+class Loadbalancer
+{
 
-class Loadbalancer{
+private:
+    ClusterManager *cluster_manager;
+    RequestQueue *request_queue;
+    autoScaler scaler; // Add an instance of autoScaler
+    int total_requests_processed;
+    int total_requests_received;
+
     
-    private:
-        ClusterManager* cluster_manager;
-        RequestQueue* request_queue;
-        int total_requests_processed;
-        int total_requests_received;
+    bool tryAssign(const Request &req);
+    void drainQueue();
 
-    public:
-        Loadbalancer(ClusterManager* cm, RequestQueue* rq);
-        ~Loadbalancer();
+public:
+    Loadbalancer(ClusterManager *cm, RequestQueue *rq);
+    ~Loadbalancer();
 
-        void receiveRequest(const Request& req);
-        void processTick();
-        int getTotalRequestsProcessed();
-        int getTotalRequestsReceived();
+    void receiveRequest(const Request &req);
+    void processTick();
+    int getTotalRequestsProcessed();
+    int getTotalRequestsReceived();
 };

@@ -6,7 +6,6 @@
 #include "auto_scaler.hpp"
 #include "server.hpp"
 #include <vector>
-
 Loadbalancer::Loadbalancer(ClusterManager *cm, RequestQueue *rq)
     : cluster_manager(cm),
       request_queue(rq),
@@ -14,7 +13,6 @@ Loadbalancer::Loadbalancer(ClusterManager *cm, RequestQueue *rq)
       total_requests_received(0) {}
 
 Loadbalancer::~Loadbalancer() {}
-
 bool Loadbalancer::tryAssign(const Request &req)
 {
     std::vector<Server *> servers = cluster_manager->getActiveServers();
@@ -29,14 +27,12 @@ bool Loadbalancer::tryAssign(const Request &req)
         return false;
     return best->assignRequest(req);
 }
-
 void Loadbalancer::receiveRequest(const Request &req)
 {
     total_requests_received++;
     if (!tryAssign(req))
         request_queue->enqueue(req);
 }
-
 void Loadbalancer::drainQueue()
 {
     while (request_queue->size() > 0)
@@ -52,15 +48,15 @@ void Loadbalancer::drainQueue()
 
 void Loadbalancer::processTick()
 {
-    // 1. Fetch current active servers
+    //  Fetch current active servers
     std::vector<Server *> servers = cluster_manager->getActiveServers();
 
-    // 2. Process work on each server
+    //  Process work on each server
     for (Server *s : servers)
     {
-        s->processTick();
-        Request done; // Using the default constructor we added earlier!
-        while (s->popCompletedRequest(done))
+        s->processTick();//server
+        Request done; //object created
+        while (s->popCompletedRequest(done))//server
         {
             total_requests_processed++;
         }
@@ -69,7 +65,7 @@ void Loadbalancer::processTick()
     //  Try to route any waiting requests into the newly freed capacity
     drainQueue();
 
-    //  Check Auto-Scaling conditions using your module
+    //  Check Auto-Scaling conditions using my module
     int currentQueueSize = request_queue->size();
     ScalingDecision decision = scaler.checkScaling(servers, currentQueueSize);
 
