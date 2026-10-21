@@ -23,6 +23,7 @@ ScalingDecision autoScaler :: checkScaling(const std::vector<Server*>& servers, 
         }
     }
     if(activeServers == 0){
+        lowUtilizationStreak = 0;
         return ScalingDecision::SCALE_UP;
     }
     double averageUtilization = totalUtilization / activeServers;
@@ -44,41 +45,7 @@ ScalingDecision autoScaler :: checkScaling(const std::vector<Server*>& servers, 
     }
     std::cout << "autoScaler: No Scaling Action Required.\n";
     return ScalingDecision::NO_ACTION;
-
-    
 }
-
-ScalingDecision autoScaler::scaleCluster(ClusterManager& cluster,int queueSize){
-    std::vector<Server*> servers = cluster.getActiveServers();
-
-    ScalingDecision decision = checkScaling(servers, queueSize);
-
-    if (decision == ScalingDecision::SCALE_UP)
-    {
-        if (!cluster.isAtMaxCapacity())
-        {
-            cluster.addServer();
-        }
-        else
-        {
-            std::cout << "Cluster is at maximum capacity.\n";
-        }
-    }
-    else if (decision == ScalingDecision::SCALE_DOWN)
-    {
-        
-        if (static_cast<int>(cluster.getActiveServers().size()) > minimumServers)
-        {
-            if (!cluster.removeIdleServer())
-            {
-                std::cout << "No idle server available to remove.\n";
-            }
-        }
-    }
-
-    return decision;
-}
-
 
 int autoScaler::getLowUtilizationStreak() const{
     return lowUtilizationStreak;

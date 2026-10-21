@@ -2,21 +2,20 @@
 #ifndef AUTO_SCALER_HPP
 #define AUTO_SCALER_HPP
 #include "server.hpp"
-#include "clusterManager.hpp"
 #include <vector>
 
 enum class ScalingDecision
 {
-    SCALE_UP,
-    SCALE_DOWN,
-    NO_ACTION
+    SCALE_UP, // default 0 
+    SCALE_DOWN, // default 1
+    NO_ACTION // default 2
 };
 
 class autoScaler
 {
 private:
-    double scaleUpThreshold;
-    double scaleDownThreshold;
+    int scaleUpThreshold; 
+    int scaleDownThreshold;
     int minimumServers;
     int lowUtilizationStreak;
     int scalingStreakLimit;
@@ -25,8 +24,6 @@ public:
     autoScaler();
 
     ScalingDecision checkScaling(const std::vector<Server *> &servers,int queueSize);
-
-    ScalingDecision scaleCluster(ClusterManager &cluster,int queueSize);
 
     int getLowUtilizationStreak() const;
 };
