@@ -1,17 +1,18 @@
+
 #include "../include/report_generator.hpp"
-#include <iostream>
 
 ReportGenerator::ReportGenerator()
 {
 }
 
-void ReportGenerator::merge(std::vector<double>& values,
-                            int left,
-                            int mid,
-                            int right)
+void ReportGenerator::merge(
+    std::vector<ServerReport>& values,
+    int left,
+    int mid,
+    int right)
 {
-    std::vector<double> leftPart;
-    std::vector<double> rightPart;
+    std::vector<ServerReport> leftPart;
+    std::vector<ServerReport> rightPart;
 
     for (int i = left; i <= mid; i++)
         leftPart.push_back(values[i]);
@@ -24,24 +25,26 @@ void ReportGenerator::merge(std::vector<double>& values,
     int k = left;
 
     // Descending order
-    while (i < leftPart.size() && j < rightPart.size())
+    while (i < static_cast<int>(leftPart.size()) &&
+           j < static_cast<int>(rightPart.size()))
     {
-        if (leftPart[i] > rightPart[j])
+        if (leftPart[i].utilization >= rightPart[j].utilization)
             values[k++] = leftPart[i++];
         else
             values[k++] = rightPart[j++];
     }
 
-    while (i < leftPart.size())
+    while (i < static_cast<int>(leftPart.size()))
         values[k++] = leftPart[i++];
 
-    while (j < rightPart.size())
+    while (j < static_cast<int>(rightPart.size()))
         values[k++] = rightPart[j++];
 }
 
-void ReportGenerator::mergeSort(std::vector<double>& values,
-                                int left,
-                                int right)
+void ReportGenerator::mergeSort(
+    std::vector<ServerReport>& values,
+    int left,
+    int right)
 {
     if (left >= right)
         return;
@@ -54,20 +57,32 @@ void ReportGenerator::mergeSort(std::vector<double>& values,
     merge(values, left, mid, right);
 }
 
-void ReportGenerator::generateReport(std::vector<double> utilization)
+std::vector<ServerReport> ReportGenerator::generateReport(
+    const std::vector<Server*>& servers)
 {
-    if (utilization.empty())
+    std::vector<ServerReport> reportData;
+
+    for (Server* server : servers)
     {
-        std::cout << "No server data available.\n";
-        return;
+        if (server == nullptr ||
+            server->getStatus() != ServerStatus::ACTIVE)
+            continue;
+
+        ServerReport data;
+        data.serverId = server->getId();
+        data.utilization = server->getUtilizationPercentage();
+
+        reportData.push_back(data);
     }
 
-    mergeSort(utilization, 0, utilization.size() - 1);
-
-    std::cout << "\nServer Utilization Report:\n";
-
-    for (double value : utilization)
+    if (!reportData.empty())
     {
-        std::cout << value << "%\n";
+        mergeSort(
+            reportData,
+            0,
+            static_cast<int>(reportData.size()) - 1
+        );
     }
+
+    return reportData;
 }
