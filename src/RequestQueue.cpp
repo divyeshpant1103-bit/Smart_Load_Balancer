@@ -7,7 +7,18 @@ RequestQueue::RequestQueue()
     count=0;
 }
 
+RequestQueue::~RequestQueue()
+{
+    while (front != nullptr)
+    {
+        Node* temp = front;
+        front = front->next;
+        delete temp;
+    }
 
+    back = nullptr;
+    count = 0;
+}
 
 void RequestQueue::enqueue(Request request)
 {
@@ -30,7 +41,7 @@ Request RequestQueue::dequeue()
 {
     if (front == nullptr)
     {
-        return Request(-1);
+        return Request(-1, RequestType::LIGHT, 0);
     }
     Request request = front->request;
     Node* temp = front;
@@ -70,7 +81,7 @@ Request RequestQueue::peek()
 {
     if (front == nullptr)
     {
-        return Request(-1);
+        return Request(-1, RequestType::LIGHT, 0);
     }
 
     return front->request;
