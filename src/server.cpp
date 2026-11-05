@@ -101,3 +101,16 @@ bool Server::popCompletedRequest(Request& out_completed_req) {
     }
     return false;        
 }
+
+void Server::extractUnfinishedRequests(std::vector<Request>& requests){
+    requestNode* current = queue_head;
+    while(current != nullptr){
+        requests.push_back(current->data);
+        requestNode* next_node = current->next;
+        delete current;
+        current = next_node;
+    }
+    queue_head = nullptr;
+    queue_tail = nullptr;
+    current_load = 0;
+}

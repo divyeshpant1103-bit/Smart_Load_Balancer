@@ -17,7 +17,7 @@ enum class ServerStatus{
 };
 
 struct SystemConfig{
-    static const int INITIAL_SERVER_COUNT = 3;
+    static const int INITIAL_SERVER_COUNT = 2;
     static const int MAX_SERVER_CAPACITY = 10;
     static const int MAX_CLUSTER_SIZE = 6;
     static const int SCALE_UP_THRESHOLD = 75;

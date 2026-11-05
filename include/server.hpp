@@ -41,6 +41,8 @@ class Server{
         void clearQueue();
         requestNode* getHead() { return queue_head; }
 
+        void extractUnfinishedRequests(std::vector<Request>& requests);
+
 };
 
 #endif
