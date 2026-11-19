@@ -34,7 +34,7 @@ class Server{
         double getUtilizationPercentage();
         ServerStatus getStatus();
         void setStatus(ServerStatus new_status);
-
+        void setLoadForTest(int load) { current_load = load; } // For testing purposes only
         bool assignRequest(const Request& req);
         void processTick();
         bool popCompletedRequest(Request& completed_req);

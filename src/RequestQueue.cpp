@@ -1,13 +1,20 @@
 #include "../include/RequestQueue.hpp"
-
+#include "../include/common.hpp"
 RequestQueue::RequestQueue()
 {
     front = nullptr;
     back = nullptr;
     count=0;
 }
-
-
+RequestQueue::~RequestQueue()
+{
+    while (front != nullptr)
+    {
+        Node *temp = front;
+        front = front->next;
+        delete temp;
+    }
+}
 
 void RequestQueue::enqueue(Request request)
 {
@@ -30,7 +37,7 @@ Request RequestQueue::dequeue()
 {
     if (front == nullptr)
     {
-        return Request(-1);
+        return Request();
     }
     Request request = front->request;
     Node* temp = front;
@@ -70,7 +77,7 @@ Request RequestQueue::peek()
 {
     if (front == nullptr)
     {
-        return Request(-1);
+        return Request();
     }
 
     return front->request;

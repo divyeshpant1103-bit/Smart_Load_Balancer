@@ -1,8 +1,6 @@
 #ifndef REQUEST_QUEUE_HPP
 #define REQUEST_QUEUE_HPP
-
-#include "Request.hpp"
-
+#include "common.hpp"
 class RequestQueue
 {
 private:

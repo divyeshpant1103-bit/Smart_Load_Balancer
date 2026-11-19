@@ -4,7 +4,8 @@
 #include "server.hpp"
 #include <vector>
 
-enum class ScalingDecision
+enum class ScalingDecision//used to indicate the scaling action to be taken by the autoScaler
+//remove the confusion of using bool for scaling decision, as we have three possible actions: scale up, scale down, or no action.
 {
     SCALE_UP,
     SCALE_DOWN,

@@ -53,7 +53,7 @@ bool Server::assignRequest(const Request& req) {
     if(status != ServerStatus::ACTIVE || current_load >= max_capacity){
         return false;
     }
-    requestNode* new_node = new requestNode(req);
+    requestNode* new_node = new requestNode(req);//create a node for ll of requests currently assigned to servers
     if(queue_head == nullptr){
         queue_head = queue_tail = new_node;
     }
@@ -75,7 +75,7 @@ void Server::processTick() {
     }
 }
 
-bool Server::popCompletedRequest(Request& out_completed_req) {
+bool Server::popCompletedRequest(Request& out_completed_req) {//delete from front
     requestNode* prev = nullptr;
     requestNode* current = queue_head;
 
