@@ -1,3 +1,5 @@
+#ifndef LOAD_BALANCER_HPP
+#define LOAD_BALANCER_HPP
 #include "common.hpp"
 #include "auto_scaler.hpp"
 class ClusterManager;
@@ -25,3 +27,4 @@ public:
     int getTotalRequestsProcessed();
     int getTotalRequestsReceived();
 };
+#endif
