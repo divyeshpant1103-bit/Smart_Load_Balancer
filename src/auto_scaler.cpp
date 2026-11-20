@@ -2,20 +2,20 @@
 #include <iostream>
 
 autoScaler::autoScaler(){
-    scaleUpThreshold = 75.0; // Example threshold for scaling up
-    scaleDownThreshold = 25.0; // Example threshold for scaling down
-    minimumServers = 2; // Minimum number of servers to maintain
+    scaleUpThreshold = SystemConfig::SCALE_UP_THRESHOLD; 
+    scaleDownThreshold = SystemConfig::SCALE_DOWN_THRESHOLD; 
+    minimumServers = SystemConfig::INITIAL_SERVER_COUNT;     
     lowUtilizationStreak = 0;
-    scalingStreakLimit = 2; // Number of consecutive low utilizations before scaling down
+    scalingStreakLimit = SystemConfig::SCALING_STREAK_LIMIT; 
 }
 
 ScalingDecision autoScaler :: checkScaling(const std::vector<Server*>& servers, int queueSize){
     if(servers.empty()){
-        return ScalingDecision::SCALE_UP; // If no servers, we need to scale up
+        return ScalingDecision::SCALE_UP; 
     }
     double totalUtilization = 0.0;
     int activeServers = 0;
-    for(Server *server : servers){
+    for(Server* server : servers){
         if(server == nullptr) continue;
         if(server->getStatus() == ServerStatus::ACTIVE){
             totalUtilization += server->getUtilizationPercentage();
@@ -23,11 +23,12 @@ ScalingDecision autoScaler :: checkScaling(const std::vector<Server*>& servers, 
         }
     }
     if(activeServers == 0){
+        lowUtilizationStreak = 0;
         return ScalingDecision::SCALE_UP;
     }
     double averageUtilization = totalUtilization / activeServers;
     
-    if(averageUtilization > scaleUpThreshold && queueSize > 2){
+    if(averageUtilization > scaleUpThreshold && queueSize>2){
         lowUtilizationStreak = 0; 
         std::cout << "autoScaler: Scale Up Required.\n";
         return ScalingDecision::SCALE_UP;
@@ -40,11 +41,12 @@ ScalingDecision autoScaler :: checkScaling(const std::vector<Server*>& servers, 
             return ScalingDecision::SCALE_DOWN;
         }
     } else {
-        lowUtilizationStreak = 0; // Reset streak if utilization is not low
+        lowUtilizationStreak = 0; 
     }
     std::cout << "autoScaler: No Scaling Action Required.\n";
     return ScalingDecision::NO_ACTION;
 }
+
 int autoScaler::getLowUtilizationStreak() const{
     return lowUtilizationStreak;
 }

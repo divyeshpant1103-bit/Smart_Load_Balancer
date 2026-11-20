@@ -30,7 +30,7 @@ struct Request{
     RequestType type;
     int remaining_ticks;
     int arrival_time;
-
+    Request() : request_id(-1), type(RequestType::LIGHT), remaining_ticks(0), arrival_time(0) {}
     Request(int id, RequestType req_type, int arrival){
         request_id = id;
         type = req_type;
