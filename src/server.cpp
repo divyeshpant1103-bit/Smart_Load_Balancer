@@ -53,7 +53,7 @@ bool Server::assignRequest(const Request& req) {
     if(status != ServerStatus::ACTIVE || current_load >= max_capacity){
         return false;
     }
-    requestNode* new_node = new requestNode(req);//create a node for ll of requests currently assigned to servers
+    requestNode* new_node = new requestNode(req);
     if(queue_head == nullptr){
         queue_head = queue_tail = new_node;
     }
@@ -75,7 +75,7 @@ void Server::processTick() {
     }
 }
 
-bool Server::popCompletedRequest(Request& out_completed_req) {//delete from front
+bool Server::popCompletedRequest(Request& out_completed_req) {
     requestNode* prev = nullptr;
     requestNode* current = queue_head;
 
@@ -100,4 +100,17 @@ bool Server::popCompletedRequest(Request& out_completed_req) {//delete from fron
         current = current->next;
     }
     return false;        
+}
+
+void Server::extractUnfinishedRequests(std::vector<Request>& requests){
+    requestNode* current = queue_head;
+    while(current != nullptr){
+        requests.push_back(current->data);
+        requestNode* next_node = current->next;
+        delete current;
+        current = next_node;
+    }
+    queue_head = nullptr;
+    queue_tail = nullptr;
+    current_load = 0;
 }

@@ -77,14 +77,26 @@ bool ClusterManager::removeIdleServer(){
     }
     return false;
 }
-std::vector<Server *> ClusterManager::getActiveServers()
-{
-    std::vector<Server *> active_servers;
-    ServerNode *curr = head;
-    while (curr != nullptr)
-    {
-        active_servers.push_back(curr->server);
-        curr = curr->next;
+
+Server* ClusterManager::findServer(int id){
+    ServerNode* current = head;
+    while(current != nullptr){
+        if(current->server->getId() == id){
+            return current->server;
+        }
+        current = current->next;
     }
-    return active_servers;
+    return nullptr;
+}
+
+std::vector<Server*> ClusterManager::getActiveServers(){
+    std::vector<Server*> active;
+    ServerNode* current = head;
+    while(current != nullptr){
+        if(current->server->getStatus() == ServerStatus::ACTIVE){
+            active.push_back(current->server);
+        }
+        current = current->next;
+    }
+    return active;
 }

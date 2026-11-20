@@ -7,7 +7,7 @@
 enum class RequestType{
     LIGHT = 1,
     MEDIUM = 3,
-    HEAVY = 5,
+    HEAVY = 5
 };
 
 enum class ServerStatus{
@@ -19,10 +19,10 @@ enum class ServerStatus{
 struct SystemConfig{
     static const int INITIAL_SERVER_COUNT = 2;
     static const int MAX_SERVER_CAPACITY = 10;
+    static const int MAX_CLUSTER_SIZE = 6;
     static const int SCALE_UP_THRESHOLD = 75;
     static const int SCALE_DOWN_THRESHOLD = 25;
     static const int SCALING_STREAK_LIMIT = 2;
-    static const int MAX_CLUSTER_SIZE = 6;
 };
 
 struct Request{
@@ -47,7 +47,6 @@ struct Request{
                 break;
         }
     }
-    Request() = default;
 
     std::string getType() {
         switch(type){
