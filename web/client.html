@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Client Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #101419;
+            --panel: #161c23;
+            --line: #2a333d;
+            --ink: #e4e9ee;
+            --muted: #8793a0;
+            --faint: #5b6672;
+            --accent: #e8b73a;
+            --accent-ink: #17120a;
+            --l: #5fb89a;
+            --m: #d9a441;
+            --h: #d8665c;
+            --ok: #5fb89a;
+            --bad: #d8665c;
+            --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+            --cond: "Barlow Condensed", "Arial Narrow", sans-serif;
+            color-scheme: dark;
+        }
+
+        @media (prefers-color-scheme:light) {
+            :root:not([data-theme="dark"]) {
+                --bg: #e9ecef;
+                --panel: #f7f8f9;
+                --line: #c9d0d7;
+                --ink: #161d24;
+                --muted: #5a6672;
+                --faint: #6f7b87;
+                --accent: #9a6a00;
+                --accent-ink: #ffffff;
+                --l: #1f8a6a;
+                --m: #a8741a;
+                --h: #b5443a;
+                --ok: #1f8a6a;
+                --bad: #b5443a;
+                color-scheme: light
+            }
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: var(--mono);
+            font-size: 13px;
+            line-height: 1.45;
+            padding: 18px max(16px, env(safe-area-inset-right, 0px)) 40px max(16px, env(safe-area-inset-left, 0px))
+        }
+
+        .wrap {
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px
+        }
+
+        .top {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+            align-items: baseline;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 12px
+        }
+
+        .brand {
+            font-family: var(--cond);
+            font-weight: 600;
+            font-size: 24px;
+            letter-spacing: .04em;
+            text-transform: uppercase
+        }
+
+        .top a {
+            color: var(--accent);
+            text-decoration: none
+        }
+
+        .top a:hover {
+            text-decoration: underline
+        }
+
+        .link {
+            font-size: 12px;
+            color: var(--faint)
+        }
+
+        .link.ok {
+            color: var(--ok)
+        }
+
+        .link.bad {
+            color: var(--bad)
+        }
+
+        .ribbon {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 22px;
+            color: var(--muted)
+        }
+
+        .ribbon b {
+            color: var(--ink);
+            font-weight: 500;
+            font-variant-numeric: tabular-nums
+        }
+
+        section h2 {
+            margin: 0 0 8px;
+            font-family: var(--cond);
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--muted)
+        }
+
+        .card {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            padding: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center
+        }
+
+        .note {
+            color: var(--faint);
+            font-size: 12px;
+            width: 100%
+        }
+
+        button,
+        select {
+            font: inherit;
+            color: var(--ink);
+            background: transparent;
+            border: 1px solid var(--line);
+            padding: 6px 12px;
+            border-radius: 3px
+        }
+
+        button {
+            cursor: pointer
+        }
+
+        button:hover {
+            border-color: var(--accent);
+            color: var(--accent)
+        }
+
+        button:focus-visible,
+        select:focus-visible,
+        input:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px
+        }
+
+        select {
+            background: var(--bg)
+        }
+
+        button.go {
+            background: var(--accent);
+            color: var(--accent-ink);
+            border-color: var(--accent);
+            font-weight: 600
+        }
+
+        button.go:hover {
+            color: var(--accent-ink);
+            filter: brightness(1.08)
+        }
+
+        button.on {
+            border-color: var(--bad);
+            color: var(--bad)
+        }
+
+        button.L {
+            border-left: 4px solid var(--l)
+        }
+
+        button.M {
+            border-left: 4px solid var(--m)
+        }
+
+        button.H {
+            border-left: 4px solid var(--h)
+        }
+
+        .lbl {
+            font-family: var(--cond);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--faint);
+            font-size: 13px
+        }
+
+        input[type=range] {
+            accent-color: var(--accent);
+            flex: 1;
+            min-width: 140px;
+            max-width: 260px
+        }
+
+        .rate {
+            min-width: 110px;
+            font-variant-numeric: tabular-nums
+        }
+
+        .log {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            height: 220px;
+            overflow-y: auto
+        }
+
+        .log li {
+            padding: 4px 10px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            gap: 10px
+        }
+
+        .log li:last-child {
+            border-bottom: 0
+        }
+
+        .log .t {
+            color: var(--faint);
+            min-width: 64px;
+            font-variant-numeric: tabular-nums
+        }
+
+        .log .bad {
+            color: var(--bad)
+        }
+
+        .hint {
+            color: var(--faint);
+            padding: 10px
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            * {
+                transition: none !important
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+
+        <div class="top">
+            <div class="brand">Client Simulator</div>
+            <a href="/">Open dashboard</a>
+            <div class="link" id="link">not connected yet</div>
+        </div>
+
+        <div class="ribbon">
+            <span>sent <b id="sSent">0</b></span>
+            <span>failed <b id="sFail">0</b></span>
+            <span>server tick <b id="sTick">-</b></span>
+            <span>waiting in queue <b id="sQueue">-</b></span>
+            <span>active servers <b id="sSrv">-</b></span>
+        </div>
+
+        <section>
+            <h2>One user</h2>
+            <div class="card">
+                <button class="L" id="bL">Light</button>
+                <button class="M" id="bM">Medium</button>
+                <button class="H" id="bH">Heavy</button>
+                <span class="note">Each click sends one real POST /request.</span>
+            </div>
+        </section>
+
+        <section>
+            <h2>Flash crowd</h2>
+            <div class="card">
+                <span class="lbl">Type</span>
+                <select id="crowdType" aria-label="Flash crowd request type">
+                    <option value="M" selected>Medium</option>
+                    <option value="L">Light</option>
+                    <option value="H">Heavy</option>
+                    <option value="">Mixed</option>
+                </select>
+                <button class="go" id="bCrowd">Flash crowd &times;30</button>
+                <span class="note">30 users arrive at once, in a single request.</span>
+            </div>
+        </section>
+
+        <section>
+            <h2>Steady traffic</h2>
+            <div class="card">
+                <span class="lbl">Rate</span>
+                <input type="range" id="rate" min="1" max="10" value="2" aria-label="Requests per second">
+                <span class="rate" id="rateOut">2 requests/s</span>
+                <button id="bSteady" aria-pressed="false">Start traffic</button>
+                <span class="note">Sends a mixed batch (about half light, a third medium, the rest heavy) every second
+                    until you stop it.</span>
+            </div>
+        </section>
+
+        <section>
+            <h2>Sent log</h2>
+            <ul class="log" id="log">
+                <li class="hint">Nothing sent yet.</li>
+            </ul>
+        </section>
+
+        <div class="note">The requests are real HTTP calls, but the work each one does is simulated: its duration is
+            counted in ticks on the server.</div>
+
+    </div>
+
+    <script>
+        const $ = id => document.getElementById(id);
+        const NAMES = { L: 'light', M: 'medium', H: 'heavy', '': 'mixed' };
+        let sent = 0, failed = 0, steady = null, inflight = false;
+        const entries = []; // {time, text, bad}
+
+        function stamp() { return new Date().toLocaleTimeString([], { hour12: false }); }
+
+        function addLog(text, bad) {
+            entries.unshift({ time: stamp(), text, bad: !!bad });
+            while (entries.length > 40) entries.pop();
+            const ul = $('log');
+            ul.innerHTML = '';
+            entries.forEach(e => {
+                const li = document.createElement('li');
+                const t = document.createElement('span'); t.className = 't'; t.textContent = e.time;
+                const m = document.createElement('span'); m.textContent = e.text; if (e.bad) m.className = 'bad';
+                li.appendChild(t); li.appendChild(m); ul.appendChild(li);
+            });
+        }
+
+        function setLink(ok) {
+            $('link').textContent = ok ? 'connected to backend' : 'backend not reachable';
+            $('link').className = 'link ' + (ok ? 'ok' : 'bad');
+        }
+
+        function showServer(s) {
+            $('sTick').textContent = s.tick;
+            $('sQueue').textContent = s.queue.length;
+            $('sSrv').textContent = s.servers.filter(v => v.active).length;
+        }
+
+        /* One real HTTP call. type is 'L','M','H' or '' for the server's random mix. */
+        async function send(n, type) {
+            const url = '/request?n=' + n + (type ? '&type=' + type : '');
+            try {
+                const r = await fetch(url, { method: 'POST' });
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                const s = await r.json();
+                sent += n; $('sSent').textContent = sent;
+                setLink(true); showServer(s);
+                addLog('+' + n + ' ' + NAMES[type] + ' \u2192 queue ' + s.queue.length + ', tick ' + s.tick, false);
+                return true;
+            } catch (e) {
+                failed += n; $('sFail').textContent = failed;
+                setLink(false);
+                addLog('failed to send ' + n + ' ' + NAMES[type] + ' (' + e.message + ')', true);
+                return false;
+            }
+        }
+
+        $('bL').onclick = () => send(1, 'L');
+        $('bM').onclick = () => send(1, 'M');
+        $('bH').onclick = () => send(1, 'H');
+        $('bCrowd').onclick = () => send(30, $('crowdType').value);
+
+        $('rate').oninput = () => { const r = $('rate').value; $('rateOut').textContent = r + (r == 1 ? ' request/s' : ' requests/s'); };
+
+        /* The rate is read at every tick of the timer, so moving the slider takes effect on the next second. */
+        $('bSteady').onclick = () => {
+            const b = $('bSteady');
+            if (steady) {
+                clearInterval(steady); steady = null;
+                b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); b.textContent = 'Start traffic';
+                addLog('steady traffic stopped', false);
+                return;
+            }
+            b.classList.add('on'); b.setAttribute('aria-pressed', 'true'); b.textContent = 'Stop traffic';
+            addLog('steady traffic started', false);
+            steady = setInterval(async () => {
+                if (inflight) return;          // never let slow responses pile up
+                inflight = true;
+                await send(parseInt($('rate').value, 10), '');
+                inflight = false;
+            }, 1000);
+        };
+    </script>
+</body>
+
+</html>
