@@ -1,6 +1,6 @@
 # SMART CLOUD INFRASTRUCTURE AND LOAD BALANCER SIMULATOR
 
-A console-based C++ simulator which models the way a cloud infrastructure distributes, queues, scales and recovers from failures when dealing with a continuously varying stream of incoming requests.
+A GUI based C++ simulator which models the way a cloud infrastructure distributes, queues, scales and recovers from failures when dealing with a continuously varying stream of incoming requests.
 The entire program being based on core Data structures, Algorithms and Object-oriented programming, without using a real cloud platform.
 
 ---
@@ -102,6 +102,10 @@ Smart_Load_Balancer/
 │   ├── Request.cpp
 │   ├── RequestQueue.cpp
 │   └── server.cpp
+│
+├── web/
+│   ├── client.html
+│   └── index.html
 │
 ├── .gitignore
 └── README.md
