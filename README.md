@@ -47,7 +47,7 @@ The goal is to demonstrate how linked lists, queues, heaps, sorting algorithms a
 * **Compiler:** Any standard C++ compiler (g++ / MSVC / clang++), C++11 or later
 * **Concurrency:** std::thread, std::mutex for background request processing
 * **Core DSA concepts:** Doubly Linked List, custom Queue (deque-like), Max-Heap, Merge Sort, Threshold-based control logic
-* **Build tool:** Makefile / CMake
+* **Frontend:** Html, CSS, Javascript 
 * **Version control:** Git & Github
 
 ---
@@ -71,28 +71,39 @@ The goal is to demonstrate how linked lists, queues, heaps, sorting algorithms a
 
 ```text
 Smart_Load_Balancer/
+│
 ├── include/
-│   ├── autoScaler.hpp
+│   ├── auto_scaler.hpp
 │   ├── clusterManager.hpp
 │   ├── common.hpp
-│   ├── failureHandler.hpp
-│   ├── reportGenerator.hpp
-│   ├── requestQueue.hpp
+│   ├── failure_handler.hpp
+│   ├── load_balancer.hpp
+│   ├── report_generator.hpp
+│   ├── Request.hpp
+│   ├── RequestQueue.hpp
 │   ├── server.hpp
-│   └── serverMaxHeap.hpp
-├── src/
-│   ├── autoScaler.cpp
-│   ├── failueHandler.cpp
-│   ├── main.cpp
-│   ├── reportGenerator.cpp
-│   ├── Request.cpp
-│   ├── requestQueue.cpp
-│   └── server.cpp
+│   └── servermaxheap.hpp
+│
 ├── Modules_Notes/
-│   ├── LoadBalancer.md
+│   ├── AutoScaler.md
+│   ├── FailureHandler.md
+│   ├── Load_Balancer.md
+│   ├── ReportGenerator.md
+│   ├── Request_Queue_Management.md
 │   └── Server.md
+│
+├── src/
+│   ├── auto_scaler.cpp
+│   ├── clusterManager.cpp
+│   ├── failure_handler.cpp
+│   ├── loadbalancer.cpp
+│   ├── main.cpp
+│   ├── report_generator.cpp
+│   ├── Request.cpp
+│   ├── RequestQueue.cpp
+│   └── server.cpp
+│
 ├── .gitignore
-├── Makefile
 └── README.md
 ```
 ---
@@ -101,7 +112,6 @@ Smart_Load_Balancer/
 
 ### Prerequisites
 * A C++ compiler supporting C++17 or later (g++, clang++, or MSVC)
-* make
 * Git (to clone the repository)
 
 ### Build and Run Instructions
@@ -109,11 +119,11 @@ Smart_Load_Balancer/
 ```bash
 git clone https://github.com/divyeshpant1103-bit/Smart_Load_Balancer.git
 cd Smart_Load_Balancer
-make
-./cloud_sim
+g++ -std=c++17 -Iinclude src/*.cpp -o lbserver -pthread
+./lbserver
 ```
 
-**Note:** The project is currently in active module development phase. It will be fully executable upon upcoming feature merges.
+**Note:** Copy the localhost url in browser.
 
 ---
 
@@ -124,11 +134,11 @@ make
 | Milestone | Status |
 | :--- | :---: |
 | **Requirement analysis & system design** | Complete |
-| **Core DSA & OOP class implementation (Server, ClusterManager)** | In progress |
-| **Request handling & load balancing (Queue, max-heap routing)** | In progress |
-| **Auto-scaling & failure handling** | In progress |
-| **Background processing & thread synchronization** | Not started |
-| **Testing (normal / spike / queue-buildup scenarios)** | Not started |
-| **Final report & demonstration** | Not started |
+| **Core DSA & OOP class implementation (Server, ClusterManager)** | Complete |
+| **Request handling & load balancing (Queue, max-heap routing)** | Complete |
+| **Auto-scaling & failure handling** | Complete |
+| **Background processing & thread synchronization** | Completed |
+| **Testing (normal / spike / queue-buildup scenarios)** | Complete |
+| **Final report & demonstration** | Complete |
 
 ---
