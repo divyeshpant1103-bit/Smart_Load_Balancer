@@ -43,7 +43,7 @@ ScalingDecision autoScaler :: checkScaling(const std::vector<Server*>& servers, 
     } else {
         lowUtilizationStreak = 0; 
     }
-    std::cout << "autoScaler: No Scaling Action Required.\n";
+    //std::cout << "autoScaler: No Scaling Action Required.\n";
     return ScalingDecision::NO_ACTION;
 }
 

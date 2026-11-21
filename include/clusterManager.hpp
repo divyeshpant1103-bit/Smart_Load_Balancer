@@ -30,6 +30,7 @@ class ClusterManager{
         bool removeIdleServer();
         Server* findServer(int id);
         std::vector<Server*> getActiveServers();
+        std::vector<Server *> getAllServers();
 
         int getTotalServers();
         bool isAtMaxCapacity();

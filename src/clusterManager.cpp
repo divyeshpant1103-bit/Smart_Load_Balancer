@@ -100,3 +100,10 @@ std::vector<Server*> ClusterManager::getActiveServers(){
     }
     return active;
 }
+std::vector<Server *> ClusterManager::getAllServers()
+{
+    std::vector<Server *> v;
+    for (ServerNode *c = head; c; c = c->next)
+        v.push_back(c->server);
+    return v;
+}

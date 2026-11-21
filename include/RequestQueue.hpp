@@ -22,6 +22,7 @@ public:
     Request dequeue();
     void enqueue_front(Request request);
     int size();
+    std::vector<Request> snapshot();
     Request peek();
 };
 #endif

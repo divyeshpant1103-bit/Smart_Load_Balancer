@@ -86,3 +86,10 @@ Request RequestQueue::peek()
 
     return front->request;
 }
+std::vector<Request> RequestQueue::snapshot()
+{
+    std::vector<Request> out;
+    for (Node *cur = front; cur != nullptr; cur = cur->next)
+        out.push_back(cur->request);
+    return out;
+}

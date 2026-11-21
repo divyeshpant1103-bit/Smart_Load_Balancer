@@ -2,7 +2,6 @@
 #define SERVER_H
 
 #include "common.hpp"
-
 //custom node for the Server's internal request queue assigned to it currently
 struct requestNode{
     Request data;
